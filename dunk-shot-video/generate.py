@@ -94,8 +94,8 @@ def gen_veo(text: str, negative: str, out: Path, duration: int, model: str):
         "parameters": {
             "aspectRatio": "16:9",
             "negativePrompt": negative,
-            "durationSeconds": max(duration, 5),  # Veo minimum is 5 s; trim in post
-            "personGeneration": "allow_adult",
+            # Veo 3.1 accepts 4/6/8 s; older Veo 3 accepts 5-8 s
+            "durationSeconds": duration if duration in (4, 6, 8) else 8,
             "resolution": "1080p",
         },
     }
@@ -220,7 +220,7 @@ def main():
     print(f"provider={provider} out={a.out}")
 
     if provider == "veo":
-        gen_veo(text, negative, a.out, duration, a.model or "veo-3.0-generate-001")
+        gen_veo(text, negative, a.out, duration, a.model or "veo-3.1-generate-preview")
     elif provider == "runway":
         gen_runway(text, a.out, duration, a.image, a.model or "gen4_turbo")
     else:
