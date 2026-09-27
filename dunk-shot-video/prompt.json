@@ -9,25 +9,25 @@
   },
   "camera": {
     "type": "locked-off static camera, no camera equipment visible in frame",
-    "position": "inside the court, on the center axis in line with the basket, about 6 m back from the hoop near the free-throw line, behind the player's run-up line",
+    "position": "inside the court on the center axis, directly in line with the basket, positioned about 7 m from the baseline just behind the free-throw line, behind the player's run-up line; the hoop occupies the upper third of the frame and the player's body fills roughly half the frame height when he is at the rim",
     "height_cm": 100,
     "tilt": "level, 0 degrees",
     "lens": "1x standard, approx. 26mm full-frame equivalent",
     "movement": "none (no pan, tilt, zoom, or handheld shake); the frame never moves"
   },
   "location": {
-    "type": "indoor gymnasium basketball court",
+    "type": "indoor gymnasium with a regulation FIBA basketball court",
     "details": [
-      "polished hardwood floor with painted court lines",
-      "high ceiling with exposed steel trusses",
-      "bright overhead gym lights",
-      "padded wall and empty bleachers behind the basket",
-      "regulation rim at 305 cm with backboard and net"
+      "regulation FIBA hoop: rim exactly 3.05 m above the floor, orange rim 45 cm in diameter, white net, glass backboard 1.80 m wide by 1.05 m tall, rim bottom edge 15 cm above the backboard's lower edge, mounted on a black overhead goal structure",
+      "correct real-world proportions: a 180 cm player standing under the rim has the rim about 1.25 m above the top of his head, roughly one full arm length plus a head; at the peak of a high jump his hands reach 20-30 cm above the rim",
+      "exactly one basketball hoop in the shot; the wall behind it is plain with a dark padded strip at floor level, no other hoops, backboards or courts visible",
+      "polished hardwood floor with regulation painted lines: free-throw lane (key), free-throw line 5.80 m from the baseline, and three-point arc",
+      "high ceiling with exposed steel trusses and bright overhead gym lights, empty bleachers to the sides"
     ]
   },
   "subject": {
     "count": 1,
-    "description": "athletic male basketball player",
+    "description": "athletic male basketball player with an elite vertical leap, realistic human proportions",
     "height_cm": 180,
     "wardrobe": [
       "plain sleeveless basketball jersey, no logos or text",
@@ -38,24 +38,36 @@
     "facing": "back to camera, running away toward the basket"
   },
   "action": [
-    "enters from lower right of frame, already close to the camera",
-    "dribbles two hard steps toward the basket",
-    "two-step gather and an explosive jump, head rising above rim level",
-    "powerful one-handed right-hand slam dunk, ball driven straight down through the hoop with force",
-    "grabs and hangs on the rim for a moment, then drops and lands on both feet",
-    "ball hits the floor hard and bounces",
-    "rim and net shake violently from the impact"
+    "enters from lower right of frame close to the camera",
+    "takes two hard dribbles toward the basket inside the key",
+    "gathers the ball in both hands and explodes upward off both feet with a huge vertical jump",
+    "SLAM DUNK: at the peak of the jump his hands and the ball are clearly above the rim, about 20-30 cm above it, not higher",
+    "slams the ball straight down through the hoop with both hands, rim rattles and net snaps",
+    "hangs from the rim with both hands for a moment, feet dangling about 60 cm above the floor",
+    "drops, lands on both feet, ball bounces on the floor behind him"
   ],
   "look": [
-    "photorealistic live-action footage, not CGI",
+    "photorealistic live-action footage, not CGI, physically accurate proportions and scale",
     "natural slightly cool gym lighting",
     "realistic floor reflections and soft shadow under the player",
     "subtle realistic motion blur",
-    "smooth 60fps-like motion",
     "neutral color grade",
     "sharp focus on player and rim"
   ],
   "negative": [
+    "oversized hoop",
+    "rim too high",
+    "tiny player",
+    "giant player",
+    "second hoop",
+    "second backboard",
+    "multiple courts",
+    "layup",
+    "tip-in",
+    "putback",
+    "jump shot",
+    "ball rolling on the rim",
+    "player far below the rim",
     "tripod",
     "camera",
     "camera equipment",
@@ -88,7 +100,6 @@
     "low resolution",
     "flicker",
     "jitter",
-    "layup",
     "gentle finish",
     "weak jump"
   ]
