@@ -82,3 +82,22 @@ python3 generate.py --provider veo -o out/raw.mp4
 ```
 
 `postprocess.sh` は `rife-ncnn-vulkan` と `realesrgan-ncnn-vulkan` が PATH にあればそれを使い、なければ ffmpeg のみで補間・拡大します。最後に `ffprobe` で 3840×2160 / 60fps / 約 4 秒であることを表示します。
+
+## 実施結果（2026-09-27）
+
+Veo 3.1 で 7 テイク生成し、最終的に **開始・終了フレーム付きの画像→動画方式** で規定寸法とダンクの成立を両立しました。
+
+| テイク | 方式 | 結果 |
+|---|---|---|
+| 1〜4 | テキストのみ | リングが高すぎる／三脚が写る／2 枚目のボードが出る／ティップインになる |
+| 5〜6 | 開始＋終了フレーム（ぶら下がり） | 寸法は正しいがぶら下がり中に体が伸びる |
+| 7 | 開始＋終了フレーム（着地姿勢）、fast モデル | 採用。両手ダンク→着地。3.5〜7.5 秒を切り出し |
+
+参照フレームは `frames/` にあります。`frame_first_runup.jpg` と `frame_last_landed.jpg` がテイク 7 に使った組です。再生成するときは:
+
+```bash
+python3 generate.py --provider veo --image frames/frame_first_runup.jpg --last-frame frames/frame_last_landed.jpg -o out/raw.mp4
+./postprocess.sh out/raw.mp4 out/dunk_4k60.mp4 3.5
+```
+
+既知の限界: 1080p は 8 秒固定のため、4 秒の本番動作の前に余分な跳躍が 1 回入ります。切り出し位置で除外しています。
