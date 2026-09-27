@@ -1,0 +1,66 @@
+{
+  "title": "Gym dunk shot, static tripod behind the player",
+  "duration_seconds": 4,
+  "aspect_ratio": "16:9",
+  "target_output": {
+    "resolution": "3840x2160",
+    "fps": 60,
+    "note": "Most models output 1080p/24-30fps natively. Generate at max native quality, then upscale and interpolate. See POSTPROCESS.md."
+  },
+  "camera": {
+    "type": "fixed tripod",
+    "position": "inside the court, on the center axis in line with the basket, approx. 7-8 m back from the hoop, behind the player's run-up line",
+    "height_cm": 100,
+    "tilt": "level, 0 degrees",
+    "lens": "1x standard, approx. 26mm full-frame equivalent",
+    "movement": "none (no pan, tilt, zoom, or handheld shake)"
+  },
+  "location": {
+    "type": "indoor gymnasium basketball court",
+    "details": [
+      "polished hardwood floor with painted court lines",
+      "high ceiling with exposed steel trusses",
+      "bright overhead gym lights",
+      "padded wall and empty bleachers behind the basket",
+      "regulation rim at 305 cm with backboard and net"
+    ]
+  },
+  "subject": {
+    "count": 1,
+    "description": "athletic male basketball player",
+    "height_cm": 180,
+    "wardrobe": [
+      "plain sleeveless basketball jersey, no logos or text",
+      "basketball shorts",
+      "high-top basketball sneakers",
+      "athletic socks"
+    ],
+    "facing": "back to camera, running away toward the basket"
+  },
+  "action": [
+    "enters from lower right of frame",
+    "dribbles two or three steps toward the basket",
+    "two-step gather and jump",
+    "powerful one-handed right-hand dunk",
+    "grabs rim for a split second, lets go, lands on both feet",
+    "ball drops through the net and bounces on the floor",
+    "rim and net shake from the impact"
+  ],
+  "look": [
+    "photorealistic live-action footage, not CGI",
+    "natural slightly cool gym lighting",
+    "realistic floor reflections and soft shadow under the player",
+    "subtle realistic motion blur",
+    "smooth 60fps-like motion",
+    "neutral color grade",
+    "sharp focus on player and rim"
+  ],
+  "negative": [
+    "camera movement", "pan", "zoom", "handheld shake", "slow motion",
+    "multiple players", "crowd", "spectators", "text", "captions", "logos",
+    "watermark", "subtitles", "distorted limbs", "extra limbs", "malformed hands",
+    "extra fingers", "duplicated ball", "warped rim", "bent backboard",
+    "anime", "illustration", "cartoon", "CGI look", "blurry", "low resolution",
+    "flicker", "jitter"
+  ]
+}
