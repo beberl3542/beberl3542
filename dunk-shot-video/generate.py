@@ -94,13 +94,15 @@ def gen_veo(text: str, negative: str, out: Path, duration: int, model: str):
         "parameters": {
             "aspectRatio": "16:9",
             "negativePrompt": negative,
-            # Veo 3.1 accepts 4/6/8 s; older Veo 3 accepts 5-8 s
-            "durationSeconds": duration if duration in (4, 6, 8) else 8,
+            # Veo 3.1 accepts 4/6/8 s, but 1080p is only offered at 8 s.
+            # Generate 8 s at 1080p for a sharper upscale source; trim in post.
+            "durationSeconds": 8,
             "resolution": "1080p",
         },
     }
     r = requests.post(f"{base}/models/{model}:predictLongRunning", headers=h, json=body, timeout=60)
-    r.raise_for_status()
+    if not r.ok:
+        sys.exit(f"veo HTTP {r.status_code}: {r.text}")
     op = r.json()["name"]
     print("veo operation:", op)
     while True:
