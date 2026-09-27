@@ -8,12 +8,12 @@
     "note": "Most models output 1080p/24-30fps natively. Generate at max native quality, then upscale and interpolate. See POSTPROCESS.md."
   },
   "camera": {
-    "type": "fixed tripod",
-    "position": "inside the court, on the center axis in line with the basket, approx. 7-8 m back from the hoop, behind the player's run-up line",
+    "type": "locked-off static camera, no camera equipment visible in frame",
+    "position": "inside the court, on the center axis in line with the basket, about 6 m back from the hoop near the free-throw line, behind the player's run-up line",
     "height_cm": 100,
     "tilt": "level, 0 degrees",
     "lens": "1x standard, approx. 26mm full-frame equivalent",
-    "movement": "none (no pan, tilt, zoom, or handheld shake)"
+    "movement": "none (no pan, tilt, zoom, or handheld shake); the frame never moves"
   },
   "location": {
     "type": "indoor gymnasium basketball court",
@@ -38,13 +38,13 @@
     "facing": "back to camera, running away toward the basket"
   },
   "action": [
-    "enters from lower right of frame",
-    "dribbles two or three steps toward the basket",
-    "two-step gather and jump",
-    "powerful one-handed right-hand dunk",
-    "grabs rim for a split second, lets go, lands on both feet",
-    "ball drops through the net and bounces on the floor",
-    "rim and net shake from the impact"
+    "enters from lower right of frame, already close to the camera",
+    "dribbles two hard steps toward the basket",
+    "two-step gather and an explosive jump, head rising above rim level",
+    "powerful one-handed right-hand slam dunk, ball driven straight down through the hoop with force",
+    "grabs and hangs on the rim for a moment, then drops and lands on both feet",
+    "ball hits the floor hard and bounces",
+    "rim and net shake violently from the impact"
   ],
   "look": [
     "photorealistic live-action footage, not CGI",
@@ -56,11 +56,40 @@
     "sharp focus on player and rim"
   ],
   "negative": [
-    "camera movement", "pan", "zoom", "handheld shake", "slow motion",
-    "multiple players", "crowd", "spectators", "text", "captions", "logos",
-    "watermark", "subtitles", "distorted limbs", "extra limbs", "malformed hands",
-    "extra fingers", "duplicated ball", "warped rim", "bent backboard",
-    "anime", "illustration", "cartoon", "CGI look", "blurry", "low resolution",
-    "flicker", "jitter"
+    "tripod",
+    "camera",
+    "camera equipment",
+    "stand in the foreground",
+    "camera movement",
+    "pan",
+    "zoom",
+    "handheld shake",
+    "slow motion",
+    "multiple players",
+    "crowd",
+    "spectators",
+    "text",
+    "captions",
+    "logos",
+    "watermark",
+    "subtitles",
+    "distorted limbs",
+    "extra limbs",
+    "malformed hands",
+    "extra fingers",
+    "duplicated ball",
+    "warped rim",
+    "bent backboard",
+    "anime",
+    "illustration",
+    "cartoon",
+    "CGI look",
+    "blurry",
+    "low resolution",
+    "flicker",
+    "jitter",
+    "layup",
+    "gentle finish",
+    "weak jump"
   ]
 }
