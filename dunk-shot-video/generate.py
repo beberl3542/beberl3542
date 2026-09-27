@@ -85,12 +85,23 @@ def auth_headers(env: str, header: str, prefix: str = "") -> dict:
     return {header: f"{prefix}{key}"}
 
 
-def gen_veo(text: str, negative: str, out: Path, duration: int, model: str):
+def _img(path: Path) -> dict:
+    mime = "image/png" if path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n" else "image/jpeg"
+    return {"bytesBase64Encoded": base64.b64encode(path.read_bytes()).decode(), "mimeType": mime}
+
+
+def gen_veo(text: str, negative: str, out: Path, duration: int, model: str,
+            first_frame: Path = None, last_frame: Path = None):
     base = "https://generativelanguage.googleapis.com/v1beta"
     auth = auth_headers("GEMINI_API_KEY", "x-goog-api-key")
     h = {**auth, "Content-Type": "application/json"}
+    inst = {"prompt": text}
+    if first_frame:
+        inst["image"] = _img(first_frame)  # image-to-video: locks scene, scale and camera
+    if last_frame:
+        inst["lastFrame"] = _img(last_frame)  # Veo 3.1 first+last frame interpolation
     body = {
-        "instances": [{"prompt": text}],
+        "instances": [inst],
         "parameters": {
             "aspectRatio": "16:9",
             "negativePrompt": negative,
@@ -204,7 +215,8 @@ def main():
     ap.add_argument("--provider", choices=["veo", "runway", "fal"])
     ap.add_argument("--prompt", type=Path, default=HERE / "prompt.json")
     ap.add_argument("-o", "--out", type=Path, default=HERE / "out" / "raw.mp4")
-    ap.add_argument("--image", type=Path, help="reference still (runway only)")
+    ap.add_argument("--image", type=Path, help="first-frame still (veo image-to-video, runway)")
+    ap.add_argument("--last-frame", type=Path, help="last-frame still (veo 3.1 only)")
     ap.add_argument("--model", help="override provider model id")
     ap.add_argument("--dry-run", action="store_true", help="print the prompt and exit")
     a = ap.parse_args()
@@ -222,7 +234,7 @@ def main():
     print(f"provider={provider} out={a.out}")
 
     if provider == "veo":
-        gen_veo(text, negative, a.out, duration, a.model or "veo-3.1-generate-preview")
+        gen_veo(text, negative, a.out, duration, a.model or "veo-3.1-generate-preview", a.image, a.last_frame)
     elif provider == "runway":
         gen_runway(text, a.out, duration, a.image, a.model or "gen4_turbo")
     else:
