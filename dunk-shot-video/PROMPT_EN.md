@@ -52,3 +52,12 @@ Static tripod shot, 100 cm high, level, 1x standard lens, inside an indoor gymna
 - If the player's height reads wrong, add: "the rim is at regulation 305 cm; the player's reach at full extension just clears the rim".
 - If the model puts the camera behind the backboard instead of behind the player, add: "the backboard faces the camera, we see the front of the rim and the net, the player runs away from the camera".
 - If you need the player facing the camera instead, replace "seen from behind" with "seen from the front, running toward the camera" and move the camera under the basket. This is a different shot from the one specified here.
+
+## Lessons from the Veo 3.1 takes (2026-09)
+
+- **Never write "tripod" in the prompt.** Veo rendered a physical tripod in the frame. Say "locked-off static camera, no camera equipment visible".
+- **Text-only prompts do not hold regulation scale from this angle.** In four text-only takes the rim came out far too high for a 180 cm player and the dunk degraded into a tip-in or jump shot; a second, lower backboard also appeared repeatedly.
+- **What worked: image-to-video with a first and last frame.** Generate a regulation-scale start still and an end still with a Gemini image model (`gen_frame.py`), then pass them to Veo 3.1 as `image` and `lastFrame` (`generate.py --image ... --last-frame ...`). This locked the single hoop, the 3.05 m rim, the camera height and the dunk itself.
+- **1080p is only offered at 8 s.** With an 8 s clip and a start position close to the basket the model pads the time with an extra jump; start the player farther back or describe a two-second dribble in place first.
+- **Hanging on the rim stretches the body over time.** Keep the hang short or end the clip on a landing pose instead.
+- `personGeneration: allow_adult` is rejected by Veo 3.1 on the Gemini API; omit it.
