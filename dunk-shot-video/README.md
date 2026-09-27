@@ -34,6 +34,9 @@
 - `PROMPT_EN.md` … 英語版プロンプト（実際にモデルへ投入する版。各モデルは英語のほうが精度が高い）
 - `prompt.json` … 構造化プロンプト（API 経由で投げるとき用）
 - `POSTPROCESS.md` … 4K/60fps 化と書き出しの手順（ffmpeg コマンド付き）
+- `generate.py` … API 経由で生成するスクリプト（Veo / Runway / fal.ai Kling 対応）
+- `postprocess.sh` … `POSTPROCESS.md` の手順を自動実行するスクリプト
+- `.gitignore` … 生成物（`out/`）を除外
 
 ## 使い方
 
@@ -42,3 +45,26 @@
 3. アスペクト比 16:9、尺 4〜5 秒、最高画質を選ぶ。
 4. 数回生成して、リングが画面中央・上部に収まり、選手の体格が「180cm がリングに届く」自然な比率になっているものを選ぶ。
 5. `POSTPROCESS.md` で 4K/60fps に仕上げる。
+
+## 自動化（API キーがある場合）
+
+API キーを環境変数に入れておくと、生成から 4K/60fps 化まで 2 コマンドで終わります。
+
+| プロバイダ | 環境変数 | 備考 |
+|---|---|---|
+| Google Veo | `GEMINI_API_KEY` | テキストから直接生成。最短 5 秒なので後で 4 秒にトリム |
+| Runway Gen-4 | `RUNWAYML_API_SECRET` | 画像→動画のため、カメラ位置から撮った無人の体育館の静止画を `--image` で渡す |
+| fal.ai (Kling) | `FAL_KEY` | テキストから直接生成。ネガティブプロンプト対応 |
+
+```bash
+cd dunk-shot-video
+pip install requests
+
+# 1. 生成（キーのあるプロバイダを自動選択。--dry-run でプロンプトだけ確認可）
+python3 generate.py -o out/raw.mp4
+
+# 2. 4K/60fps/4秒に仕上げ（第3引数は切り出し開始秒）
+./postprocess.sh out/raw.mp4 out/dunk_4k60.mp4 0.5
+```
+
+`postprocess.sh` は `rife-ncnn-vulkan` と `realesrgan-ncnn-vulkan` が PATH にあればそれを使い、なければ ffmpeg のみで補間・拡大します。最後に `ffprobe` で 3840×2160 / 60fps / 約 4 秒であることを表示します。
