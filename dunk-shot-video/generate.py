@@ -6,6 +6,14 @@ Supported providers (pick with --provider or auto-detect from env):
   runway  Runway Gen-4 (image-to-video)   env: RUNWAYML_API_SECRET  (needs --image)
   fal     fal.ai hosted Kling             env: FAL_KEY
 
+Credentials may also be injected by the Claude Code environment proxy
+("API credentials" in the environment settings). In that case no env var is
+set: pass --provider explicitly (or set VIDEO_PROVIDER) and the script sends
+requests without an auth header; the proxy adds it for the allowed host.
+  veo    : allowed website generativelanguage.googleapis.com, header x-goog-api-key: <key>
+  runway : allowed website api.dev.runwayml.com,            header Authorization: Bearer <key>
+  fal    : allowed website queue.fal.run,                   header Authorization: Key <key>
+
 Usage:
   python3 generate.py                       # auto-detect provider from env
   python3 generate.py --provider veo -o raw.mp4
@@ -68,10 +76,19 @@ def download(url: str, out: Path, headers=None):
 
 
 # --------------------------------------------------------------------------- veo
+def auth_headers(env: str, header: str, prefix: str = "") -> dict:
+    """Return the auth header if the key is in env, else {} (proxy-injected)."""
+    key = os.environ.get(env)
+    if not key:
+        print(f"{env} not set; assuming the environment proxy injects '{header}'")
+        return {}
+    return {header: f"{prefix}{key}"}
+
+
 def gen_veo(text: str, negative: str, out: Path, duration: int, model: str):
-    key = os.environ["GEMINI_API_KEY"]
     base = "https://generativelanguage.googleapis.com/v1beta"
-    h = {"x-goog-api-key": key, "Content-Type": "application/json"}
+    auth = auth_headers("GEMINI_API_KEY", "x-goog-api-key")
+    h = {**auth, "Content-Type": "application/json"}
     body = {
         "instances": [{"prompt": text}],
         "parameters": {
@@ -98,18 +115,17 @@ def gen_veo(text: str, negative: str, out: Path, duration: int, model: str):
         sys.exit(f"veo error: {js['error']}")
     vids = js["response"]["generateVideoResponse"]["generatedSamples"]
     uri = vids[0]["video"]["uri"]
-    download(uri, out, headers={"x-goog-api-key": key})
+    download(uri, out, headers=auth)
 
 
 # ------------------------------------------------------------------------ runway
 def gen_runway(text: str, out: Path, duration: int, image: Path, model: str):
-    key = os.environ["RUNWAYML_API_SECRET"]
     if not image:
         sys.exit("runway image-to-video needs --image (a still of the empty gym from the camera position)")
     b64 = base64.b64encode(image.read_bytes()).decode()
     mime = "image/png" if image.suffix.lower() == ".png" else "image/jpeg"
     h = {
-        "Authorization": f"Bearer {key}",
+        **auth_headers("RUNWAYML_API_SECRET", "Authorization", "Bearer "),
         "X-Runway-Version": "2024-11-06",
         "Content-Type": "application/json",
     }
@@ -140,8 +156,7 @@ def gen_runway(text: str, out: Path, duration: int, image: Path, model: str):
 
 # --------------------------------------------------------------------------- fal
 def gen_fal(text: str, negative: str, out: Path, duration: int, model: str):
-    key = os.environ["FAL_KEY"]
-    h = {"Authorization": f"Key {key}", "Content-Type": "application/json"}
+    h = {**auth_headers("FAL_KEY", "Authorization", "Key "), "Content-Type": "application/json"}
     body = {
         "prompt": text,
         "negative_prompt": negative,
@@ -174,7 +189,12 @@ def detect_provider() -> str:
         return "runway"
     if os.environ.get("FAL_KEY"):
         return "fal"
-    sys.exit("No provider key found. Set GEMINI_API_KEY, RUNWAYML_API_SECRET or FAL_KEY.")
+    if os.environ.get("VIDEO_PROVIDER"):
+        return os.environ["VIDEO_PROVIDER"]
+    sys.exit(
+        "No provider key found. Set GEMINI_API_KEY, RUNWAYML_API_SECRET or FAL_KEY, "
+        "or pass --provider when the credential is injected by the environment proxy."
+    )
 
 
 def main():

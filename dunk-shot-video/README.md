@@ -67,4 +67,18 @@ python3 generate.py -o out/raw.mp4
 ./postprocess.sh out/raw.mp4 out/dunk_4k60.mp4 0.5
 ```
 
+### 環境設定の「API認証情報」で登録する場合
+
+Claude Code の環境設定にある「API認証情報」は、キーを環境変数として渡すのではなく、指定したサイトへの通信にプロキシが自動でヘッダーを付ける方式です。次のように登録し、実行時は `--provider` を明示します。
+
+| プロバイダ | 許可ウェブサイト | カスタムヘッダー名 | プレフィックス | 値 |
+|---|---|---|---|---|
+| Google Veo | `generativelanguage.googleapis.com` | `x-goog-api-key` | （空） | API キー |
+| Runway | `api.dev.runwayml.com` | `Authorization` | `Bearer` | API キー |
+| fal.ai (Kling) | `queue.fal.run` | `Authorization` | `Key` | API キー |
+
+```bash
+python3 generate.py --provider veo -o out/raw.mp4
+```
+
 `postprocess.sh` は `rife-ncnn-vulkan` と `realesrgan-ncnn-vulkan` が PATH にあればそれを使い、なければ ffmpeg のみで補間・拡大します。最後に `ffprobe` で 3840×2160 / 60fps / 約 4 秒であることを表示します。
